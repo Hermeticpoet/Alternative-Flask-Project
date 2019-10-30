@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Welcome</h1>
+<h1>Welcome to What2Eat</h1>
 <p>Click <a href="/logout">here</a> to Logout.</p>
-
-{% for message in get_flashed_messages() %}
-        {{ message }}
-      {% endfor %}
+<br><br>
+<h3>Recipes</h3>
+{% for recipe in recipes %}
+    <p>
+        <strong>Title:</strong> {{ recipe.title }}<br>
+        <strong>Description:</strong> {{ recipe.description }}
+    </p>
+<br>
+{% endfor %}
 {% endblock %}
 

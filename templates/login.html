@@ -8,11 +8,5 @@
         <input type="password" placeholder="Password" name="password" value="{{ request.form.password }}">
         <input type="submit" class="btn btn-defualt" value="Login">
     </form>
-    {% if error %}
-        <p class="error"><strong>Error:</strong>{{ error }}</p>
-    {% endif %}
-    {% for message in get_flashed_messages() %}
-        {{ message }}
-    {% endfor %}
 </div>
 {% endblock %}
