@@ -39,9 +39,11 @@ def home():
     # G used by Flask to store temporary object
     g.db = connect_db()
     cur = g.db.execute("select * from recipes")
-    recipes = [dict(title=row[0], description=row[1]) for row in cur.fetchall()]
+    recipes = []
+    for row in cur.fetchall():
+        recipes.append(dict(title=row[0], description=row[1]))
     g.db.close()
-    return render_template("index.html", title="Home", recipes=recipes) # render a template
+    return render_template("index.html", title="Home", recipes=recipes) 
 
 
 # Login Page
