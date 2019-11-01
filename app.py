@@ -2,8 +2,6 @@ import os
 from os import environ
 from flask import Flask, render_template, redirect, request, url_for, flash, jsonify, session, g
 from functools import wraps
-from flask_pymongo import PyMongo
-from bson.objectid import ObjectId
 from forms import RegistrationForm, LoginForm
 import sqlite3
 
@@ -21,6 +19,8 @@ app.database = "cookbook.db"
 # mongo = PyMongo(app)
 
 # Login required decorator
+
+
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -36,14 +36,14 @@ def login_required(f):
 @app.route("/index")
 @login_required
 def home():
-    # G used by Flask to store temporary object
+    # G used by Flask to store temporary object during connection
     g.db = connect_db()
     cur = g.db.execute("select * from recipes")
     recipes = []
     for row in cur.fetchall():
         recipes.append(dict(title=row[0], description=row[1]))
     g.db.close()
-    return render_template("index.html", title="Home", recipes=recipes) 
+    return render_template("index.html", title="Home", recipes=recipes)
 
 
 # Login Page
@@ -59,16 +59,20 @@ def login():
             return redirect(url_for("home"))
     return render_template("login.html", error=error)
 
+
 @app.route("/logout")
 @login_required
 def logout():
-    session.pop("logged_in", None) # will pop user session logged_in and replace with None
+    # will pop user session logged_in and replace with None
+    session.pop("logged_in", None)
     flash("You are now logged out!")
     return redirect(url_for("home"))
 
 
+# Function to connect to our database
 def connect_db():
     return sqlite3.connect(app.database)
-    
+
+
 if __name__ == "__main__":
     app.run(debug=True)
